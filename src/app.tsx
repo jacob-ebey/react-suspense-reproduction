@@ -37,6 +37,8 @@ function HydrationScript() {
 
   return (
     <script
+      async
+      type="module"
       suppressHydrationWarning
       dangerouslySetInnerHTML={{ __html: script }}
     />
@@ -61,5 +63,17 @@ function SuspendedThing() {
 }
 
 function SuspendedFallback() {
-  return <h2>Suspended Fallback</h2>;
+  // holy crap, I had to double check, but looking at the
+  // react source I just realized this component doesn't
+  // ever hydrate until a component higher up in the tree causes
+  // a re-render. ?WHAT? 🤔 
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <>
+      <h2>Suspended Fallback</h2>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+    </>
+  );
 }
